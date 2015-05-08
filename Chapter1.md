@@ -1,0 +1,79 @@
+# Chapter 1 #
+## Before You Begin ##
+
+
+### Getting Started ###
+
+If you're interested in learning how to develop with Jace, you've come to the right place, but first things first. If you've never used JNI before, you're going to be absolutely lost. No class library or set of tools can be an adequate substitute for the knowledge that you'll gain by reading through the freely available Java Native Interface Programmer's Guide and Java Native Interface Specification. Your time will have been well spent.
+
+### The Jace License ###
+
+Jace is made available under the BSD license, which roughly means that you're free to do whatever you want to with it. Here's the fine print:
+
+<pre>
+Copyright (c) 2002, Toby Reyelts<br>
+All rights reserved.<br>
+<br>
+Redistribution and use in source and binary forms, with or without modification,<br>
+are permitted provided that the following conditions are met:<br>
+<br>
+Redistributions of source code must retain the above copyright notice,<br>
+this list of conditions and the following disclaimer.<br>
+Redistributions in binary form must reproduce the above copyright notice,<br>
+this list of conditions and the following disclaimer in the documentation<br>
+and/or other materials provided with the distribution.<br>
+Neither the name of Toby Reyelts nor the names of his contributors<br>
+may be used to endorse or promote products derived from this software<br>
+without specific prior written permission.<br>
+<br>
+<br>
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"<br>
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br>
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE<br>
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE<br>
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR<br>
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE<br>
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br>
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,<br>
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF<br>
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br>
+</pre>
+
+### Compatibility ###
+
+You've probably already got a development platform in mind, or perhaps two or three. Jace is excellent for cross-platform development, because it's built using only the standard C++ library and a JDK 1.4 or later compiler. Here's a matrix of all of the known Jace compatible compilers, operating systems, and architectures. If your favorite compiler/os/arch isn't listed, download the source and give the build a try. You're likely to experience a pleasant surprise.
+
+|            | Windows | Linux | MacOSX |
+|:-----------|:--------|:------|:-------|
+| Visual C++ |    X    |       |        |
+| GCC        |    X    |   X   |   X    |
+
+
+### Source-Code ###
+
+Jace uses a [Mercurial](http://tortoisehg.bitbucket.org/) source-code repository. If you haven't already, you may check out the source-code from https://jace.googlecode.com/hg/.
+
+This is what you should see:
+
+The root folder contains all of the binaries and tools you need to use Jace. It consists of the following folders:
+
+  * bin - The proxygen, batchgen, autoproxy, and peergen code-generation tools.
+  * docs - The documentation necessary to use Jace - including what you're staring at right now.
+  * examples - Several example programs used to demonstrate the features available in Jace.
+
+This folder also contains the source used to build the JRL (Java Runtime Library) and code-generation tools. This is where you can go to build your own version of the JRL if Jace didn't come with pre-built binaries for your platform. The source directory has the following folders:
+
+  * core/cpp/src/main/cpp - Jace's C++ source and header files.
+  * core/java/src/main/java - Jace's Java source code.
+
+
+### Binaries ###
+
+You don't need to build Jace yourself. Simply locate a version at http://search.maven.org/#search|ga|1|g%3A%22com.googlecode.jace%22 and download the following components:
+
+  * [jace-core-java.jar](http://search.maven.org/remotecontent?filepath=com/googlecode/jace/jace-core-java/1.2.14/jace-core-java-1.2.14.jar) contains Ant tasks and command-line tools for generating C++ peers.
+  * [jace-core-cpp.jar](http://search.maven.org/#artifactdetails|com.googlecode.jace|jace-core-cpp|1.2.14|jar) contains C++ header files and libraries to link against.
+  * Add [jace-runtime.jar](http://search.maven.org/remotecontent?filepath=com/googlecode/jace/jace-runtime/1.2.14/jace-runtime-1.2.14.jar) to your Java classpath.
+
+
+<p align='right'><a href='DeveloperGuide.md'>Previous</a> <a href='Chapter2.md'>Next</a></p>
