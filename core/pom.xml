@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.googlecode.jace</groupId>
 		<artifactId>jace</artifactId>
-		<version>1.2.33-SNAPSHOT</version>
+		<version>1.3.0</version>
 	</parent>
 	<artifactId>jace-core</artifactId>
 	<packaging>pom</packaging>
@@ -22,8 +23,8 @@
 		<url>https://jace.googlecode.com/hg/</url>
 		<connection>scm:hg:https://jace.googlecode.com/hg/</connection>
 		<developerConnection>scm:hg:https://jace.googlecode.com/hg/</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<developers>
 		<developer>
 			<id>cowwoc</id>

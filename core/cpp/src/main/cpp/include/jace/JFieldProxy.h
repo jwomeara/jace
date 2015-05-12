@@ -136,9 +136,9 @@ public:
 	FieldType& operator=(const FieldType& field)
 	{
 		if (parent)
-			setJavaJniObject(JFieldProxyHelper::assign(field, parent, fieldID));
+			this->setJavaJniObject(JFieldProxyHelper::assign(field, parent, fieldID));
 		else
-			setJavaJniObject(JFieldProxyHelper::assign(field, parentClass, fieldID));
+			this->setJavaJniObject(JFieldProxyHelper::assign(field, parentClass, fieldID));
 		return *this;
 	}
 

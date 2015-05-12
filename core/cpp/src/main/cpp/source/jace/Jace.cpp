@@ -46,6 +46,9 @@ using std::map;
 using std::string;
 using std::wstring;
 
+#include <locale>
+#include <cstring>
+
 #include "jace/BoostWarningOff.h"
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>

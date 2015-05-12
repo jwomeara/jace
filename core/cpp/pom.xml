@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.googlecode.jace</groupId>
 		<artifactId>jace-core</artifactId>
-		<version>1.2.33-SNAPSHOT</version>
+		<version>1.3.0</version>
 	</parent>
 	<artifactId>jace-core-cpp</artifactId>
 	<name>Jace Core C++</name>
@@ -13,96 +14,6 @@
 		<directory>${basedir}/target/${jace.classifier}</directory>
 		<sourceDirectory>src/main/cpp</sourceDirectory>
 		<plugins>
-			<plugin>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-api</artifactId>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-system</artifactId>
-									<classifier>${jace.classifier}</classifier>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-date-time</artifactId>
-									<classifier>${boost.classifier}</classifier>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-thread</artifactId>
-									<classifier>${boost.classifier}</classifier>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-system</artifactId>
-									<classifier>${boost.classifier}</classifier>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.googlecode.boost-maven-project</groupId>
-									<artifactId>boost-chrono</artifactId>
-									<classifier>${boost.classifier}</classifier>
-									<version>${boost.version}</version>
-									<outputDirectory>${project.build.directory}/dependency/boost</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.googlecode.cmake-maven-project</groupId>
-				<artifactId>cmake-maven-plugin</artifactId>
-				<version>${cmake.version}</version>
-				<executions>
-					<execution>
-						<id>cmake-generate</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<sourcePath>${project.build.directory}/sources</sourcePath>
-							<targetPath>${project.build.directory}/cmake</targetPath>
-							<generator>${cmake.generator}</generator>
-							<environmentVariables>
-								<BOOST_HOME>${project.build.directory}/dependency/boost</BOOST_HOME>
-								<BUILD_ARCHITECTURE>${build.architecture}</BUILD_ARCHITECTURE>
-							</environmentVariables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>cmake-compile</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<projectDirectory>${project.build.directory}/cmake</projectDirectory>
-							<config>${cmake.config}</config>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
@@ -122,43 +33,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-binaries</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}/cmake/${build.type}</directory>
-									<targetPath>lib</targetPath>
-									<includes>
-										<include>*.lib</include>
-										<include>*.dll</include>
-										<include>*.pdb</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>${project.build.directory}/sources/include</directory>
-									<targetPath>include</targetPath>
-									<includes>
-										<include>**/*.h</include>
-										<include>**/*.tsp</include>
-										<include>**/*.tsd</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>${project.build.directory}/cmake</directory>
-									<targetPath>lib</targetPath>
-									<includes>
-										<include>*.so</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
 				</executions>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
@@ -166,32 +40,151 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<!-- Workaround for Maven bug: http://stackoverflow.com/a/6521686/14731 -->
-						<id>chmod-post-build</id>
-						<phase>generate-sources</phase>
-						<configuration>
-							<target>
-								<chmod file="${project.build.directory}/sources/post-build.sh" perm="755" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<classifier>${jace.classifier}</classifier>
+					<classesDirectory>${project.build.directory}/sources</classesDirectory>
+					<classifier>sources</classifier>
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.googlecode.cmake-maven-project
+										</groupId>
+										<artifactId>
+											cmake-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.8.11-b4,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+	<profiles>
+		<profile>
+			<id>generate-binaries</id>
+			<activation>
+				<property>
+					<name>!sources</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.googlecode.cmake-maven-project</groupId>
+						<artifactId>cmake-maven-plugin</artifactId>
+						<version>${cmake.version}</version>
+						<executions>
+							<execution>
+								<id>cmake-generate</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<sourcePath>${project.build.directory}/sources</sourcePath>
+									<targetPath>${project.build.directory}/cmake</targetPath>
+									<generator>${cmake.generator}</generator>
+									<environmentVariables>
+										<BUILD_ARCHITECTURE>${build.architecture}</BUILD_ARCHITECTURE>
+									</environmentVariables>
+								</configuration>
+							</execution>
+							<execution>
+								<id>cmake-compile</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+								<configuration>
+									<projectDirectory>${project.build.directory}/cmake</projectDirectory>
+									<config>${cmake.config}</config>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.5</version>
+						<executions>
+							<execution>
+								<id>copy-binaries</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}/cmake/${build.type}</directory>
+											<targetPath>lib</targetPath>
+											<includes>
+												<include>*.lib</include>
+												<include>*.dll</include>
+												<include>*.pdb</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>${project.build.directory}/sources/include</directory>
+											<targetPath>include</targetPath>
+											<includes>
+												<include>**/*.h</include>
+												<include>**/*.tsp</include>
+												<include>**/*.tsd</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>${project.build.directory}/cmake</directory>
+											<targetPath>lib</targetPath>
+											<includes>
+												<include>*.so</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<encoding>${project.build.sourceEncoding}</encoding>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.4</version>
+						<configuration>
+							<classifier>${jace.classifier}</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
