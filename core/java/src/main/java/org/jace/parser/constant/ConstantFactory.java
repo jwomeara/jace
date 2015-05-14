@@ -60,6 +60,9 @@ public class ConstantFactory
     addReader(new DoubleConstantReader());
     addReader(new NameAndTypeConstantReader());
     addReader(new UTF8ConstantReader());
+    addReader(new MethodHandleConstantReader());
+    addReader(new MethodTypeConstantReader());
+    addReader(new InvokeDynamicConstantReader());
   }
 
   private void addReader(ConstantReader reader)

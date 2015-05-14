@@ -54,10 +54,9 @@ ELSE ()
 	MESSAGE (FATAL_ERROR "CMAKE_SYSTEM_NAME must be one of [Windows, Linux, Darwin], was ${CMAKE_SYSTEM_NAME}")
 ENDIF ()
 
-INCLUDE_DIRECTORIES (include $ENV{JAVA_HOME}/include ${java_include_path} $ENV{BOOST_HOME} $ENV{JACE_HOME}/include "${PROJECT_BINARY_DIR}/../proxies/include")
+find_package(Boost REQUIRED COMPONENTS system thread)
 
-FILE (TO_CMAKE_PATH "$ENV{BOOST_HOME}/lib" boost_home)
-find_package(Boost REQUIRED COMPONENTS boost_system boost_thread)
+INCLUDE_DIRECTORIES (include $ENV{JAVA_HOME}/include ${java_include_path} ${Boost_INCLUDE_DIRS} $ENV{JACE_HOME}/include "${PROJECT_BINARY_DIR}/../proxies/include")
 
 get_headers ("${CMAKE_CURRENT_SOURCE_DIR}/include" HEADER_FILES)
 get_sources ("${CMAKE_CURRENT_SOURCE_DIR}/source" SOURCE_FILES)
