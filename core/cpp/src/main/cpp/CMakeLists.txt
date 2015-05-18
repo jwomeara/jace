@@ -22,46 +22,34 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 PROJECT (jace)
 
 SET (jace_VERSION_MAJOR 1)
-SET (jace_VERSION_MINOR 2)
+SET (jace_VERSION_MINOR 3)
 ADD_DEFINITIONS (-DJACE_EXPORTS -DBOOST_ALL_NO_LIB)
 
 IF (CMAKE_COMPILER_IS_GNUCXX)
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
-IF ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MP")
-	IF (NOT "$ENV{BUILD_ARCHITECTURE}" STREQUAL "i386" AND NOT "$ENV{BUILD_ARCHITECTURE}" STREQUAL "amd64")
-		MESSAGE (FATAL_ERROR "Environment variable BUILD_ARCHITECTURE must be one of [i386, amd64], was $ENV{BUILD_ARCHITECTURE}")
-	ENDIF ()
-	FILE (TO_CMAKE_PATH "$ENV{JAVA_HOME}/include/win32" java_include_path)
-ELSEIF ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-	IF ("$ENV{BUILD_ARCHITECTURE}" STREQUAL "i386")
-		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
-		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-		FILE (TO_CMAKE_PATH "$ENV{JAVA_HOME}/jre/lib/i386/client" java_library_path)
-	ELSEIF ("$ENV{BUILD_ARCHITECTURE}" STREQUAL "amd64")
-		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
-		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-		FILE (TO_CMAKE_PATH "$ENV{JAVA_HOME}/jre/lib/amd64/server" java_library_path)
-	ELSE ()
-		MESSAGE (FATAL_ERROR "Environment variable BUILD_ARCHITECTURE must be one of [i386, amd64], was $ENV{BUILD_ARCHITECTURE}")
-	ENDIF ()
-	FILE (TO_CMAKE_PATH "$ENV{JAVA_HOME}/include/linux" java_include_path)
-ELSEIF (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-	FILE (TO_CMAKE_PATH "$ENV{JAVA_HOME}/include/darwin" java_include_path)
-ELSE ()
-	MESSAGE (FATAL_ERROR "CMAKE_SYSTEM_NAME must be one of [Windows, Linux, Darwin], was ${CMAKE_SYSTEM_NAME}")
-ENDIF ()
-
+find_package(JNI)
 find_package(Boost REQUIRED COMPONENTS system thread)
 
-INCLUDE_DIRECTORIES (include $ENV{JAVA_HOME}/include ${java_include_path} ${Boost_INCLUDE_DIRS} $ENV{JACE_HOME}/include "${PROJECT_BINARY_DIR}/../proxies/include")
+INCLUDE_DIRECTORIES (include ${JNI_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} "${PROJECT_BINARY_DIR}/../proxies/include")
 
 get_headers ("${CMAKE_CURRENT_SOURCE_DIR}/include" HEADER_FILES)
 get_sources ("${CMAKE_CURRENT_SOURCE_DIR}/source" SOURCE_FILES)
 
 ADD_LIBRARY (jace ${SOURCE_FILES} ${HEADER_FILES})
 
-TARGET_LINK_LIBRARIES (jace ${Boost_LIBRARIES})
+#-----------------------------------------------------------------------------
+#
+# To fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
+# used when making a shared object; recompile with -fPIC
+# See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
+#
+IF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
+  SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-fPIC")
+ENDIF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
 
+TARGET_LINK_LIBRARIES (jace ${JNI_LIBRARIES} ${Boost_LIBRARIES})
+
+install(TARGETS jace DESTINATION lib)
+install(DIRECTORY include/jace DESTINATION include)

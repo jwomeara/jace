@@ -706,7 +706,7 @@ void setJavaVmImpl(JavaVM* _jvm) throw (JNIException)
 {
 	assert(_jvm != 0);
 	JNIEnv* env = attachImpl(_jvm, 0, 0, false);
-	registerShutdownHook(env);
+	//registerShutdownHook(env);
 	jvm = _jvm;
 	jniVersion = env->GetVersion();
 }
